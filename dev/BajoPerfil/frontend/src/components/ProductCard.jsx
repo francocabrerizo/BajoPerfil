@@ -1,8 +1,16 @@
-export default function ProductCard({ product }) {
-  const { nombre, precio, descripcion, talles, imagen } = product
+export default function ProductCard({ product, onClick }) {
+  // Hacemos un fallback bilingüe por si tu JSON quedó con claves en inglés o en español
+  const nombre = product.nombre || product.name;
+  const precio = product.precio || product.price;
+  const descripcion = product.descripcion || product.description;
+  const talles = product.talles || product.sizes;
+  const imagen = product.imagen || product.image;
 
   return (
-    <div className="group flex flex-col bg-white border border-stone-100 overflow-hidden transition-all duration-300 hover:shadow-sm">
+    <div 
+      className="group flex flex-col bg-white border border-stone-100 overflow-hidden transition-all duration-300 hover:shadow-sm cursor-pointer"
+      onClick={onClick}
+    >
       {/* Contenedor de Imagen con efecto de Zoom */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
         <img
@@ -24,7 +32,7 @@ export default function ProductCard({ product }) {
             {nombre}
           </h3>
           <span className="text-base font-semibold text-stone-950">
-            ${precio.toFixed(2)}
+            ${Number(precio).toLocaleString('es-AR')}
           </span>
         </div>
 
@@ -36,7 +44,7 @@ export default function ProductCard({ product }) {
         <div className="mb-6">
           <span className="text-[10px] tracking-wider text-stone-400 uppercase block mb-1.5">Talles disponibles:</span>
           <div className="flex gap-1.5">
-            {talles.map((talle) => (
+            {talles?.map((talle) => (
               <span
                 key={talle}
                 className="w-6 h-6 flex items-center justify-center text-[10px] font-medium border border-stone-200 text-stone-600 rounded-sm hover:border-stone-900 hover:text-stone-900 transition-colors cursor-default"
@@ -53,5 +61,5 @@ export default function ProductCard({ product }) {
         </button>
       </div>
     </div>
-  )
+  );
 }

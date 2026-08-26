@@ -1,27 +1,33 @@
-import products from '../data/products.json'
-import ProductCard from './ProductCard'
+import { useState } from 'react';
+import ProductCard from './ProductCard';
+import ProductModal from './ProductModal';
+import products from '../data/products.json';
 
 export default function ProductGrid() {
-  return (
-    <section id="catalogo" className="bg-white py-16 md:py-24 px-6 border-t border-stone-200">
-      <div className="max-w-7xl mx-auto">
-        {/* Cabecera de la sección */}
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-2xl md:text-3xl font-light tracking-widest text-stone-900 uppercase">
-            Colección Esencial
-          </h2>
-          <p className="mt-3 text-stone-500 text-xs md:text-sm tracking-wider uppercase font-light">
-            Selección exclusiva de prendas minimalistas
-          </p>
-        </div>
+  // Este estado guarda el producto que el usuario quiere ver en detalle
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-        {/* Grilla de productos: 1 columna en móvil, 3 en desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+  return (
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+        {products.map((product) => (
+          <ProductCard 
+            key={product.id} 
+            product={product} 
+            // Al hacer clic, guardamos este producto en el estado
+            onClick={() => setSelectedProduct(product)} 
+          />
+        ))}
       </div>
-    </section>
-  )
+
+      {/* Si hay un producto seleccionado, renderizamos el Modal. 
+          Al cerrarlo, volvemos el estado a null */}
+      {selectedProduct && (
+        <ProductModal 
+          product={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+        />
+      )}
+    </>
+  );
 }
